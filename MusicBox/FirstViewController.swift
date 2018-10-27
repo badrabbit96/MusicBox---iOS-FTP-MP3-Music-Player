@@ -17,6 +17,10 @@ var thisSong = 0
 class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var myTableView: UITableView!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return songs.count
@@ -25,7 +29,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = songs[indexPath.row]
-        cell.contentView.backgroundColor = UIColor.darkGray
+        cell.contentView.backgroundColor = UIColor.lightGray
         cell.textLabel?.textColor = UIColor.white
         
         return cell

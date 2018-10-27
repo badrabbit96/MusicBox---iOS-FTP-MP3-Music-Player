@@ -3,7 +3,10 @@ import UIKit
 import AVFoundation
 import AVKit
 
-class PlayerViewController: UIViewController {
+class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+    
+    
+    
     @IBOutlet weak var thumbNailImageView: UIImageView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
@@ -19,12 +22,25 @@ class PlayerViewController: UIViewController {
     var index: Int = Int()
     var avPlayer: AVPlayer!
     var isPaused: Bool!
-   
+    var songs:[String] =  []
     
     @IBOutlet weak var song_author: UILabel!
 
     @IBOutlet weak var song_title_label: UILabel!
     
+    @IBOutlet weak var music_list: UITableView!
+    
+    @IBAction func libray_button(_ sender: UIButton) {
+        
+       
+        if(music_list.isHidden == false){
+            music_list.isHidden = true
+        }
+        else if (music_list.isHidden == true){
+            music_list.isHidden = false
+        }
+        
+    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -35,11 +51,54 @@ class PlayerViewController: UIViewController {
         isPaused = false
         playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
         self.playList.add("http://stacja-meteo.pl/mp3/Starley%20-%20Call%20On%20Me%20(Ryan%20Riback%20Remix).mp3")
-        self.playList.add("https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3")
-        self.playList.add("https://ia801409.us.archive.org/12/items/1HourThunderstorm/1HrThunderstorm.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Pawel%20Kukiz%20-%20Na%20falochronie.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Dzem-%20Wehikul%20czasu.mp3")
         self.play(url: URL(string:(playList[self.index] as! String))!)
         
+        music_list.isHidden = true
+        gettingSongName()
+        
         self.setupTimer()
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return songs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.textLabel?.text = songs[indexPath.row]
+        cell.contentView.backgroundColor = UIColor.darkGray
+        cell.textLabel?.textColor = UIColor.white
+        
+        tableView.layer.borderWidth = 2.0;
+        tableView.layer.cornerRadius = 5.0;
+        tableView.layer.borderColor = UIColor.lightGray.cgColor;
+
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        do
+        {
+            let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
+            selectedCell.contentView.backgroundColor = UIColor.gray
+            
+            
+            let audioPath = "http://stacja-meteo.pl/mp3/" + songs[indexPath.row] + ".mp3"
+            let audioPathFinal = audioPath.replacingOccurrences(of: " ", with: "%20")
+            
+            self.play(url: URL(string:(audioPathFinal))!)
+            self.setupTimer()
+            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            self.setTitle()
+          
+        }
+        catch
+        {
+            print("ERROR")
+        }
     }
     
     func play(url:URL) {
@@ -50,35 +109,75 @@ class PlayerViewController: UIViewController {
         avPlayer!.volume = 1.0
         avPlayer.play()
       
+        setTitle()
         
+    }
+    
+    func setTitle(){
         //tworze nazwe piosenki po adresie URL
         
-        var mySong = (playList[self.index] as! String)
+        let mySong = (playList[self.index] as! String)
         let song_title = mySong.components(separatedBy: "/")
         var title_final = ""
         title_final = (song_title[song_title.count-1])
         title_final = title_final.replacingOccurrences(of: ".mp3", with: "")
         title_final = title_final.replacingOccurrences(of: "%20", with: " ")
-      
+        
         let author_final = title_final.components(separatedBy: "-").first
         let title_m_final = title_final.components(separatedBy: "-").last
-  
+        
         song_author.text = author_final
         song_title_label.text = title_m_final
-        
-        
     }
-    /////yh
+    
     
     override func viewWillDisappear( _ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
         self.avPlayer = nil
         self.timer?.invalidate()
+        
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        
+        
+    }
+    
+    func gettingSongName()
+    {
+        do
+        {
+            for song in playList
+            {
+                var mySong = song
+                //  print (mySong)
+                if (mySong as AnyObject).contains(".mp3")
+                {
+                    print (mySong)
+                    let findString = (mySong as AnyObject).components(separatedBy: "/")
+                    //print (mySong)
+                    mySong = (findString[findString.count-1])
+                    // print (mySong)
+                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%20", with: " ")
+                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%5B", with: "")
+                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%5D", with: "")
+                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%C5%82", with: "ł")
+                    mySong = (mySong as AnyObject).replacingOccurrences(of: ".mp3", with: "")
+                    songs.append(mySong as! String)
+                    print(songs)
+                }
+            }
+            
+            music_list.reloadData()
+        }
+        catch
+        {
+            
+        }
+        
     }
     
     @IBAction func playButtonClicked(_ sender: UIButton) {

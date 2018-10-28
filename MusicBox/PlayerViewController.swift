@@ -26,6 +26,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet weak var song_author: UILabel!
 
+    @IBOutlet weak var image_cover: UIImageView!
+    
     @IBOutlet weak var song_title_label: UILabel!
     
     @IBOutlet weak var music_list: UITableView!
@@ -85,21 +87,40 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
             selectedCell.contentView.backgroundColor = UIColor.gray
             
-            
             let audioPath = "http://stacja-meteo.pl/mp3/" + songs[indexPath.row] + ".mp3"
             let audioPathFinal = audioPath.replacingOccurrences(of: " ", with: "%20")
             
             self.play(url: URL(string:(audioPathFinal))!)
             self.setupTimer()
             playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
-            self.setTitle()
-          
+            
+            
+            let playerItem = AVPlayerItem(url: URL(string:(audioPathFinal))!)
+            let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
+            
+            for item in metadataList {
+                
+                guard let key = item.commonKey?.rawValue, let value = item.value else{
+                    continue
+                }
+                
+                switch key {
+                case "title" : song_title_label.text = value as? String
+                case "artist": song_author.text = value as? String
+                case "artwork" where value is Data : image_cover.image = UIImage(data: value as! Data)
+                default:
+                    continue
+                }
+            }
+            
         }
         catch
         {
             print("ERROR")
         }
     }
+    
+  
     
     func play(url:URL) {
         self.avPlayer = AVPlayer(playerItem: AVPlayerItem(url: url))
@@ -109,25 +130,24 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         avPlayer!.volume = 1.0
         avPlayer.play()
       
-        setTitle()
+        let playerItem = AVPlayerItem(url: url)
+        let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
         
-    }
-    
-    func setTitle(){
-        //tworze nazwe piosenki po adresie URL
+        for item in metadataList {
+            
+            guard let key = item.commonKey?.rawValue, let value = item.value else{
+                continue
+            }
+            
+            switch key {
+            case "title" : song_title_label.text = value as? String
+            case "artist": song_author.text = value as? String
+            case "artwork" where value is Data : image_cover.image = UIImage(data: value as! Data)
+            default:
+                continue
+            }
+        }
         
-        let mySong = (playList[self.index] as! String)
-        let song_title = mySong.components(separatedBy: "/")
-        var title_final = ""
-        title_final = (song_title[song_title.count-1])
-        title_final = title_final.replacingOccurrences(of: ".mp3", with: "")
-        title_final = title_final.replacingOccurrences(of: "%20", with: " ")
-        
-        let author_final = title_final.components(separatedBy: "-").first
-        let title_m_final = title_final.components(separatedBy: "-").last
-        
-        song_author.text = author_final
-        song_title_label.text = title_m_final
     }
     
     

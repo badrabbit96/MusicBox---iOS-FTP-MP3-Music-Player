@@ -150,6 +150,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="SERMON" id="EN4-fA-zZ3"/>
                     <connections>
+                        <outlet property="background_image" destination="fky-xZ-lvP" id="oKh-Vg-8FL"/>
                         <outlet property="currentTimeLabel" destination="Ez3-I9-vZh" id="Ji1-Sp-TmZ"/>
                         <outlet property="image_cover" destination="aaG-nR-J1z" id="4uF-N2-1GL"/>
                         <outlet property="loadingLabel" destination="0mV-21-KZH" id="wEZ-JQ-BfV"/>

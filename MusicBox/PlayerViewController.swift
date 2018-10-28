@@ -24,6 +24,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var isPaused: Bool!
     var songs:[String] =  []
     
+    var blur_counter : Int = 0
+    
     @IBOutlet weak var song_author: UILabel!
 
     @IBOutlet weak var image_cover: UIImageView!
@@ -31,6 +33,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var song_title_label: UILabel!
     
     @IBOutlet weak var music_list: UITableView!
+    
+    @IBOutlet weak var background_image: UIImageView!
     
     @IBAction func libray_button(_ sender: UIButton) {
         
@@ -44,6 +48,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+   
+   
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -52,7 +59,10 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewWillAppear(animated)
         isPaused = false
         playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
-        self.playList.add("http://stacja-meteo.pl/mp3/Starley%20-%20Call%20On%20Me%20(Ryan%20Riback%20Remix).mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Post%20Malone%20-%20Congratulations.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/The%20Chainsmokers%20&%20Aazar%20%E2%80%93%20Siren.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Khalid%20-%20Better.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Pawel%20Kukiz%20-%20Na%20falochronie.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Dzem-%20Wehikul%20czasu.mp3")
         self.play(url: URL(string:(playList[self.index] as! String))!)
@@ -61,6 +71,30 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         gettingSongName()
         
         self.setupTimer()
+        
+        image_cover.layer.shadowColor = UIColor.black.cgColor
+        image_cover.layer.shadowOpacity = 1
+        image_cover.layer.shadowOffset = CGSize.zero
+        image_cover.layer.shadowRadius = 30
+        
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionRight(swipe:)))
+        rightSwipe.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(rightSwipe)
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionLeft(swipe:)))
+        leftSwipe.direction = UISwipeGestureRecognizer.Direction.left
+        self.view.addGestureRecognizer(leftSwipe)
+
+    }
+    
+    @objc func swipeActionRight(swipe:UISwipeGestureRecognizer)
+    {
+        self.prevTrack()
+    }
+    
+    @objc func swipeActionLeft(swipe:UISwipeGestureRecognizer)
+    {
+        self.nextTrack()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -115,6 +149,12 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let playerItem = AVPlayerItem(url: url)
         let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
         
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    
+        
         for item in metadataList {
             
             guard let key = item.commonKey?.rawValue, let value = item.value else{
@@ -133,11 +173,20 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                     if (audioImage != nil){
                         image_cover.image = audioImage
+                        background_image.image = audioImage
+                        
+                        if(blur_counter == 0){
+                        background_image.addSubview(blurEffectView)
+                        }
+                        blur_counter = blur_counter + 1
+                        
                         print("jest obrazek")
                     }
                     else{
                         print("brak")
                     }
+                    
+                    
                 }
               
                 }
@@ -148,10 +197,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
     }
-    
-    
-    
-    
+  
+
     override func viewWillDisappear( _ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
@@ -351,5 +398,7 @@ extension AVPlayer {
         return rate != 0 && error == nil
     }
 }
+
+
 
 

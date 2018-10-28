@@ -95,24 +95,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
             
             
-            let playerItem = AVPlayerItem(url: URL(string:(audioPathFinal))!)
-            let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
-            
-            for item in metadataList {
-                
-                guard let key = item.commonKey?.rawValue, let value = item.value else{
-                    continue
-                }
-                
-                switch key {
-                case "title" : song_title_label.text = value as? String
-                case "artist": song_author.text = value as? String
-                case "artwork" where value is Data : image_cover.image = UIImage(data: value as! Data)
-                default:
-                    continue
-                }
-            }
-            
         }
         catch
         {
@@ -142,13 +124,32 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             switch key {
             case "title" : song_title_label.text = value as? String
             case "artist": song_author.text = value as? String
-            case "artwork" where value is Data : image_cover.image = UIImage(data: value as! Data)
+            //case "artwork" where value is Data : image_cover.image = UIImage(data: value as! Data)
+            
+            case "artwork": do {
+                if let audioImage = UIImage(data: value as! Data) {
+                    
+                //    let size = CGSize(width: 0, height: 0)
+
+                    if (audioImage != nil){
+                        image_cover.image = audioImage
+                        print("jest obrazek")
+                    }
+                    else{
+                        print("brak")
+                    }
+                }
+              
+                }
+            
             default:
                 continue
             }
         }
         
     }
+    
+    
     
     
     override func viewWillDisappear( _ animated: Bool) {
@@ -176,7 +177,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 //  print (mySong)
                 if (mySong as AnyObject).contains(".mp3")
                 {
-                    print (mySong)
+                    //print (mySong)
                     let findString = (mySong as AnyObject).components(separatedBy: "/")
                     //print (mySong)
                     mySong = (findString[findString.count-1])
@@ -187,7 +188,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     mySong = (mySong as AnyObject).replacingOccurrences(of: "%C5%82", with: "ł")
                     mySong = (mySong as AnyObject).replacingOccurrences(of: ".mp3", with: "")
                     songs.append(mySong as! String)
-                    print(songs)
+                    //print(songs)
                 }
             }
             

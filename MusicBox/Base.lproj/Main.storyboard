@@ -113,6 +113,10 @@
                                 <rect key="frame" x="62" y="53" width="250" height="250"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QP8-mU-IzF">
+                                <rect key="frame" x="62" y="53" width="250" height="250"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LUY-Dk-pXN">
                                 <rect key="frame" x="16" y="640" width="343" height="301"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -139,8 +143,12 @@
                                     <outlet property="delegate" destination="ZeG-Ht-gUa" id="OwK-P6-Dn9"/>
                                 </connections>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QP8-mU-IzF">
-                                <rect key="frame" x="62" y="53" width="250" height="250"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="no_cover" translatesAutoresizingMaskIntoConstraints="NO" id="Qae-24-CtD">
+                                <rect key="frame" x="340" y="53" width="250" height="250"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="no_cover" translatesAutoresizingMaskIntoConstraints="NO" id="sxb-wG-L55">
+                                <rect key="frame" x="-218" y="53" width="252" height="250"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -156,9 +164,11 @@
                         <outlet property="loadingLabel" destination="0mV-21-KZH" id="wEZ-JQ-BfV"/>
                         <outlet property="music_list" destination="LUY-Dk-pXN" id="4dL-JJ-Jhd"/>
                         <outlet property="nextButton" destination="3Ue-tF-9hJ" id="QGV-6c-QpJ"/>
+                        <outlet property="next_artwork" destination="Qae-24-CtD" id="b8g-Ku-0rz"/>
                         <outlet property="playButton" destination="8YM-dp-P0s" id="NC0-rx-utA"/>
                         <outlet property="playerSlider" destination="62P-ax-lpR" id="gbK-zK-qmd"/>
                         <outlet property="prevButton" destination="wyA-r8-JnZ" id="hb9-qv-8yp"/>
+                        <outlet property="prev_image" destination="sxb-wG-L55" id="bnv-Db-Uol"/>
                         <outlet property="scrolling_image" destination="QP8-mU-IzF" id="8oF-Jj-IWv"/>
                         <outlet property="seekLoadingLabel" destination="9JD-W4-09x" id="HKC-V6-i5S"/>
                         <outlet property="song_author" destination="hHf-Nd-fQb" id="2mC-WI-Ce3"/>

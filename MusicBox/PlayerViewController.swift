@@ -23,7 +23,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var avPlayer: AVPlayer!
     var isPaused: Bool!
     var songs:[String] =  []
-    
+    var countIndex: Int = Int()
     var blur_counter : Int = 0
     
     @IBOutlet weak var song_author: UILabel!
@@ -32,7 +32,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var music_list: UITableView!
     @IBOutlet weak var background_image: UIImageView!
     @IBOutlet weak var scrolling_image: UIImageView!
-
+    @IBOutlet weak var next_artwork: UIImageView!
+    @IBOutlet weak var prev_image: UIImageView!
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -58,6 +60,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         image_cover.layer.shadowOpacity = 1
         image_cover.layer.shadowOffset = CGSize.zero
         image_cover.layer.shadowRadius = 30
+        
+        initNextArtwork()
+        initPrevArtwork()
         
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionRight(swipe:)))
         rightSwipe.direction = UISwipeGestureRecognizer.Direction.right
@@ -111,6 +116,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.music_list.isHidden = true
             self.image_cover.isHidden = false
+            self.next_artwork.isHidden = false
+            self.prev_image.isHidden = false
         }
     }
     
@@ -145,6 +152,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         else if (music_list.isHidden == true){
             image_cover.isHidden = true
+            next_artwork.isHidden = true
+            prev_image.isHidden = true
             showTable()
         }
         
@@ -265,6 +274,74 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
   
+    func initNextArtwork(){
+        if(index < playList.count-1){
+            countIndex = index + 1
+            let playerItem = AVPlayerItem(url: URL(string:(playList[self.countIndex] as! String))!)
+            let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
+            
+            for item in metadataList {
+                
+                guard let key = item.commonKey?.rawValue, let value = item.value else{
+                    continue
+                }
+                
+                switch key {
+                case "artwork": do {
+                    if let audioImage = UIImage(data: value as! Data) {
+                        if (audioImage != nil){
+                            next_artwork.image = audioImage
+                        }
+                        else{
+                            print("brak")
+                        }
+                    }
+                    }
+                default:
+                    continue
+                }
+            }
+            
+        }else{
+            next_artwork.isHidden = true
+        }
+    }
+    
+    func initPrevArtwork(){
+        print(index)
+        if(index > 0){
+            prev_image.isHidden = false
+            //index = index - 1
+            countIndex = index - 1
+            let playerItem = AVPlayerItem(url: URL(string:(playList[self.countIndex] as! String))!)
+            let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
+            
+            for item in metadataList {
+                
+                guard let key = item.commonKey?.rawValue, let value = item.value else{
+                    continue
+                }
+                
+                switch key {
+                case "artwork": do {
+                    if let audioImage = UIImage(data: value as! Data) {
+                        if (audioImage != nil){
+                            prev_image.image = audioImage
+                        }
+                        else{
+                            print("brak")
+                        }
+                    }
+                    }
+                default:
+                    continue
+                }
+            }
+            
+        }else{
+         prev_image.isHidden = true
+        }
+    }
 
     override func viewWillDisappear( _ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -424,9 +501,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func add<T: Numeric>(num1: T, num2: T) -> T {
-        return num1 - num2
-    }
 
     func nextTrack(){
         if(index < playList.count-1){
@@ -434,6 +508,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextArtwork()
+            initPrevArtwork()
           
             
         }else{
@@ -441,6 +517,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextArtwork()
+            initPrevArtwork()
         }
     }
     
@@ -450,6 +528,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextArtwork()
+            initPrevArtwork()
             
         }
     }

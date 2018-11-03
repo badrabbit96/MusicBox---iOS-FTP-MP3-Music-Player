@@ -27,15 +27,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var blur_counter : Int = 0
     
     @IBOutlet weak var song_author: UILabel!
-
     @IBOutlet weak var image_cover: UIImageView!
-    
     @IBOutlet weak var song_title_label: UILabel!
-    
     @IBOutlet weak var music_list: UITableView!
-    
     @IBOutlet weak var background_image: UIImageView!
-    
+    @IBOutlet weak var scrolling_image: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -45,8 +41,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewWillAppear(animated)
         isPaused = false
         playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
-        self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Post%20Malone%20-%20Congratulations.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/The%20Chainsmokers%20&%20Aazar%20%E2%80%93%20Siren.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Khalid%20-%20Better.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Pawel%20Kukiz%20-%20Na%20falochronie.mp3")
@@ -74,40 +70,58 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionDown(swipe:)))
         downSwipe.direction = UISwipeGestureRecognizer.Direction.down
         self.view.addGestureRecognizer(downSwipe)
-
+       
+        scrolling_image.isUserInteractionEnabled = true
+        
+        let RotationScrolling = UIRotationGestureRecognizer(target: self, action: #selector(self.Rotation))
+        scrolling_image.addGestureRecognizer(RotationScrolling)
+        
     }
     
+    @objc func Rotation(sender: UIRotationGestureRecognizer){
+        
+        let sliderNow = playerSlider.value
+        
+        //var sliderNewTime = 0
+        //if (sender.rotation > 0){
+        //    sliderNewTime = Int(sliderNow + 1)
+        //}
+        //else {
+        //    sliderNewTime = Int(sliderNow - 1)
+        //}
+       
+        let sliderRotation = sender.velocity
+        let sliderNewTime = sliderNow + Float(sliderRotation)
+        
+        let seconds : Int64 = Int64(sliderNewTime)
+        let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
+        avPlayer!.seek(to: targetTime)
+        
+        sender.view?.transform = (sender.view!.transform).rotated(by: sender.rotation)
+        sender.rotation = 0
+    }
+   
     func hideTable(){
-        
-        
-        
         UITableView.transition(with: music_list, duration: 0.5, options: .transitionCrossDissolve, animations: {
             
             self.music_list.frame = self.CGRectMake(15, 800, self.music_list.frame.width
                 , self.music_list.frame.height)
-            
         })
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.music_list.isHidden = true
             self.image_cover.isHidden = false
         }
-        
     }
     
     func showTable(){
-        
         self.music_list.isHidden = false
         UITableView.transition(with: music_list, duration: 0.5, options: .transitionCrossDissolve, animations: {
             
             self.music_list.frame = self.CGRectMake(15, 25, self.music_list.frame.width
                 , self.music_list.frame.height)
-            
-            
         })
     }
-    
-    
     
     func CGRectMake(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
         return CGRect(x: x, y: y, width: width, height: height)
@@ -152,12 +166,12 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.backgroundColor = .clear
         cell.backgroundColor = .clear
         
+        tableView.backgroundColor = UIColor.darkGray
 
         cell.textLabel?.textColor = UIColor.white
         
        // tableView.layer.opacity = 0.1;
-        
-        
+
         tableView.layer.borderWidth = 2.0;
         tableView.layer.cornerRadius = 5.0;
         tableView.layer.borderColor = UIColor.lightGray.cgColor;
@@ -393,18 +407,27 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let seconds : Float64 = CMTimeGetSeconds(currentTime)
             let time : Float = Float(seconds)
             self.playerSlider.value = time
-            timeLabel.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((self.avPlayer?.currentItem?.asset.duration)!)))))
+            let leftTime_1 = Int32(Float(Float64(CMTimeGetSeconds((self.avPlayer?.currentItem?.asset.duration)!))))
+            let leftTime_2 = Int32(time)
+            let leftTimeFinal = "-" + formatTimeFromSeconds(totalSeconds: (leftTime_1 - leftTime_2))
+            timeLabel.text = leftTimeFinal
+            
+            //timeLabel.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((self.avPlayer?.currentItem?.asset.duration)!)))))
+            
             currentTimeLabel.text = self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((self.avPlayer?.currentItem?.currentTime())!)))))
             
         }else{
             playerSlider.value = 0
             playerSlider.minimumValue = 0
             playerSlider.maximumValue = 0
-            timeLabel.text = "Live stream \(self.formatTimeFromSeconds(totalSeconds: Int32(CMTimeGetSeconds((avPlayer.currentItem?.currentTime())!))))"
+            timeLabel.text = "L \(self.formatTimeFromSeconds(totalSeconds: Int32(CMTimeGetSeconds((avPlayer.currentItem?.currentTime())!))))"
         }
     }
     
-    
+    func add<T: Numeric>(num1: T, num2: T) -> T {
+        return num1 - num2
+    }
+
     func nextTrack(){
         if(index < playList.count-1){
             index = index + 1
@@ -451,7 +474,6 @@ extension AVPlayer {
         return rate != 0 && error == nil
     }
 }
-
 
 
 

@@ -68,7 +68,7 @@
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivh-Yg-N7g">
-                                <rect key="frame" x="293" y="525" width="61" height="17"/>
+                                <rect key="frame" x="279" y="525" width="75" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -139,6 +139,10 @@
                                     <outlet property="delegate" destination="ZeG-Ht-gUa" id="OwK-P6-Dn9"/>
                                 </connections>
                             </tableView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QP8-mU-IzF">
+                                <rect key="frame" x="62" y="53" width="250" height="250"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.62419344700000001" blue="0.61124485429999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -155,6 +159,7 @@
                         <outlet property="playButton" destination="8YM-dp-P0s" id="NC0-rx-utA"/>
                         <outlet property="playerSlider" destination="62P-ax-lpR" id="gbK-zK-qmd"/>
                         <outlet property="prevButton" destination="wyA-r8-JnZ" id="hb9-qv-8yp"/>
+                        <outlet property="scrolling_image" destination="QP8-mU-IzF" id="8oF-Jj-IWv"/>
                         <outlet property="seekLoadingLabel" destination="9JD-W4-09x" id="HKC-V6-i5S"/>
                         <outlet property="song_author" destination="hHf-Nd-fQb" id="2mC-WI-Ce3"/>
                         <outlet property="song_title_label" destination="UYZ-Je-hiD" id="FJ7-ma-QgB"/>

@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--SERMON-->
+        <!--MusicBox-->
         <scene sceneID="Zwp-80-PPu">
             <objects>
-                <viewController storyboardIdentifier="PlayerViewController" title="SERMON" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ZeG-Ht-gUa" customClass="PlayerViewController" customModule="MusicBox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlayerViewController" title="MusicBox" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ZeG-Ht-gUa" customClass="PlayerViewController" customModule="MusicBox" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hnv-1r-bpS"/>
                         <viewControllerLayoutGuide type="bottom" id="O82-gN-gyz"/>
@@ -38,6 +38,16 @@
                                 <state key="normal" image="pause_grey"/>
                                 <connections>
                                     <action selector="playButtonClicked:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="z5B-vO-ypf"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C5I-JW-WXk">
+                                <rect key="frame" x="313" y="355" width="37" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="TEST">
+                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="test:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="NYl-3Z-3oG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ue-tF-9hJ">
@@ -156,7 +166,7 @@
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="amQ-AM-WJY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="SERMON" id="EN4-fA-zZ3"/>
+                    <navigationItem key="navigationItem" title="MusicBox" id="EN4-fA-zZ3"/>
                     <connections>
                         <outlet property="background_image" destination="fky-xZ-lvP" id="oKh-Vg-8FL"/>
                         <outlet property="currentTimeLabel" destination="Ez3-I9-vZh" id="Ji1-Sp-TmZ"/>

@@ -159,6 +159,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    @IBAction func test(_ sender: UIButton) {
+        //initNextArtworkSlider()
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return songs.count
@@ -248,7 +251,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 //    let size = CGSize(width: 0, height: 0)
 
                     if (audioImage != nil){
+                        
+                        ////image_cover.imageWithFade = audioImage
+
                         image_cover.image = audioImage
+                        
                         background_image.image = audioImage
                         
                         if(blur_counter == 0){
@@ -256,10 +263,10 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         blur_counter = blur_counter + 1
                         
-                        print("jest obrazek")
+                        //print("jest obrazek")
                     }
                     else{
-                        print("brak")
+                        //print("brak")
                     }
                     
                     
@@ -293,7 +300,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             next_artwork.image = audioImage
                         }
                         else{
-                            print("brak")
+                            
                         }
                     }
                     }
@@ -308,7 +315,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func initPrevArtwork(){
-        print(index)
         if(index > 0){
             prev_image.isHidden = false
             //index = index - 1
@@ -329,7 +335,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             prev_image.image = audioImage
                         }
                         else{
-                            print("brak")
+                            
                         }
                     }
                     }
@@ -341,6 +347,12 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }else{
          prev_image.isHidden = true
         }
+    }
+    // aaa
+    
+    func initNextArtworkSlider(){
+        
+        
     }
 
     override func viewWillDisappear( _ animated: Bool) {
@@ -510,6 +522,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
+            
+            //initNextArtworkSlider()
           
             
         }else{
@@ -555,5 +569,17 @@ extension AVPlayer {
     }
 }
 
-
+extension UIImageView{
+    var imageWithFade:UIImage?{
+        get{
+            return self.image
+        }
+        set{
+            UIView.transition(with: self,
+                              duration: 0.5, options: .preferredFramesPerSecond60, animations: {
+                                self.image = newValue
+            }, completion: nil)
+        }
+    }
+}
 

@@ -36,21 +36,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet weak var background_image: UIImageView!
     
-    @IBAction func libray_button(_ sender: UIButton) {
-        
-       
-        if(music_list.isHidden == false){
-            music_list.isHidden = true
-        }
-        else if (music_list.isHidden == true){
-            music_list.isHidden = false
-        }
-        
-    }
-    
-   
-   
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -84,7 +70,47 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionLeft(swipe:)))
         leftSwipe.direction = UISwipeGestureRecognizer.Direction.left
         self.view.addGestureRecognizer(leftSwipe)
+        
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionDown(swipe:)))
+        downSwipe.direction = UISwipeGestureRecognizer.Direction.down
+        self.view.addGestureRecognizer(downSwipe)
 
+    }
+    
+    func hideTable(){
+        
+        
+        
+        UITableView.transition(with: music_list, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            
+            self.music_list.frame = self.CGRectMake(15, 800, self.music_list.frame.width
+                , self.music_list.frame.height)
+            
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.music_list.isHidden = true
+            self.image_cover.isHidden = false
+        }
+        
+    }
+    
+    func showTable(){
+        
+        self.music_list.isHidden = false
+        UITableView.transition(with: music_list, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            
+            self.music_list.frame = self.CGRectMake(15, 25, self.music_list.frame.width
+                , self.music_list.frame.height)
+            
+            
+        })
+    }
+    
+    
+    
+    func CGRectMake(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
+        return CGRect(x: x, y: y, width: width, height: height)
     }
     
     @objc func swipeActionRight(swipe:UISwipeGestureRecognizer)
@@ -97,6 +123,20 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.nextTrack()
     }
     
+    @objc func swipeActionDown(swipe:UISwipeGestureRecognizer)
+    {
+        if(music_list.isHidden == false){
+            hideTable()
+           // image_cover.isHidden = false
+        }
+        else if (music_list.isHidden == true){
+            image_cover.isHidden = true
+            showTable()
+        }
+        
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return songs.count
     }
@@ -104,8 +144,19 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = songs[indexPath.row]
-        cell.contentView.backgroundColor = UIColor.darkGray
+        
+        //cell.contentView.backgroundColor = .clear
+        //cell.selectedBackgroundView?.backgroundColor = .clear
+        
+        
+        tableView.backgroundColor = .clear
+        cell.backgroundColor = .clear
+        
+
         cell.textLabel?.textColor = UIColor.white
+        
+       // tableView.layer.opacity = 0.1;
+        
         
         tableView.layer.borderWidth = 2.0;
         tableView.layer.cornerRadius = 5.0;
@@ -120,6 +171,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         {
             let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
             selectedCell.contentView.backgroundColor = UIColor.gray
+            
+           
             
             let audioPath = "http://stacja-meteo.pl/mp3/" + songs[indexPath.row] + ".mp3"
             let audioPathFinal = audioPath.replacingOccurrences(of: " ", with: "%20")

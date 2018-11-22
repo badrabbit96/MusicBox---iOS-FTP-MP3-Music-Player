@@ -14,9 +14,14 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var playerSlider: UISlider!
     @IBOutlet weak var currentTimeLabel: UILabel!
-    @IBOutlet weak var loadingLabel: UILabel!
-    @IBOutlet weak var seekLoadingLabel: UILabel!
-
+    @IBOutlet weak var songLoading: UIActivityIndicatorView!
+    
+    @IBOutlet weak var randomButton: UIButton!
+    @IBOutlet weak var loopButton: UIButton!
+    @IBOutlet weak var randomLED: UILabel!
+    @IBOutlet weak var loopLED: UILabel!
+    
+    
     var playList: NSMutableArray = NSMutableArray()
     var timer: Timer?
     var index: Int = Int()
@@ -25,6 +30,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var songs:[String] =  []
     var countIndex: Int = Int()
     var blur_counter : Int = 0
+    var randomStatus: Bool! = false
+    var loopStatus: Bool! = false
     
     @IBOutlet weak var song_author: UILabel!
     @IBOutlet weak var image_cover: UIImageView!
@@ -38,6 +45,33 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    @IBAction func randomPress(_ sender: Any) {
+    
+        if randomStatus == false{
+            randomLED.textColor = UIColor.green
+            randomStatus = true
+        }
+        
+        else if randomStatus == true{
+            randomLED.textColor = UIColor.lightGray
+            randomStatus = false
+        }
+        
+    }
+    @IBAction func loopPress(_ sender: Any) {
+    
+        if loopStatus ==  false{
+            loopLED.textColor = UIColor.green
+            loopStatus = true
+        }
+        
+        else if loopStatus ==  true{
+            loopLED.textColor = UIColor.lightGray
+            loopStatus = false
+        }
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -159,9 +193,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    @IBAction func test(_ sender: UIButton) {
-        //initNextArtworkSlider()
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return songs.count
@@ -252,7 +283,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                     if (audioImage != nil){
                         
-                        ////image_cover.imageWithFade = audioImage
+                        //image_cover.imageWithFade = audioImage
 
                         image_cover.image = audioImage
                         
@@ -439,7 +470,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
         avPlayer!.seek(to: targetTime)
         if(isPaused == false){
-            seekLoadingLabel.alpha = 1
+            
+            songLoading.isHidden = false
+            songLoading.startAnimating()
         }
     }
     
@@ -454,8 +487,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let seconds : Int64 = Int64(value)
             let targetTime:CMTime = CMTimeMake(value: seconds, timescale: 1)
             avPlayer!.seek(to: targetTime)
+            
             if(isPaused == false){
-                seekLoadingLabel.alpha = 1
+
+                songLoading.isHidden = false
+                songLoading.startAnimating()
             }
         }
     }
@@ -472,17 +508,19 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @objc func tick(){
         if(avPlayer.currentTime().seconds == 0.0){
-            loadingLabel.alpha = 1
+            
+            songLoading.isHidden = false
+            songLoading.startAnimating()
+            
         }else{
-            loadingLabel.alpha = 0
+            
+            songLoading.isHidden = true
+            songLoading.stopAnimating()
         }
         
         if(isPaused == false){
             if(avPlayer.rate == 0){
                 avPlayer.play()
-                seekLoadingLabel.alpha = 1
-            }else{
-                seekLoadingLabel.alpha = 0
             }
         }
         
@@ -576,7 +614,7 @@ extension UIImageView{
         }
         set{
             UIView.transition(with: self,
-                              duration: 0.5, options: .preferredFramesPerSecond60, animations: {
+                              duration: 0.5, options: .transitionFlipFromBottom, animations: {
                                 self.image = newValue
             }, completion: nil)
         }

@@ -26,7 +26,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MusicBox v. 1.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KN8-la-eB7">
-                                <rect key="frame" x="251" y="631" width="124" height="16"/>
+                                <rect key="frame" x="251" y="648" width="124" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -38,16 +38,6 @@
                                 <state key="normal" image="pause_grey"/>
                                 <connections>
                                     <action selector="playButtonClicked:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="z5B-vO-ypf"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C5I-JW-WXk">
-                                <rect key="frame" x="313" y="355" width="37" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="TEST">
-                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="test:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="NYl-3Z-3oG"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ue-tF-9hJ">
@@ -67,7 +57,7 @@
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="62P-ax-lpR">
-                                <rect key="frame" x="28" y="548" width="319" height="31"/>
+                                <rect key="frame" x="28" y="544" width="319" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
@@ -78,28 +68,14 @@
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivh-Yg-N7g">
-                                <rect key="frame" x="279" y="525" width="75" height="17"/>
+                                <rect key="frame" x="279" y="521" width="75" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ładowanie..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0mV-21-KZH">
-                                <rect key="frame" x="100" y="597" width="175" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9JD-W4-09x">
-                                <rect key="frame" x="131" y="597" width="112" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ez3-I9-vZh">
-                                <rect key="frame" x="0.0" y="525" width="98" height="21"/>
+                                <rect key="frame" x="0.0" y="521" width="98" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -161,6 +137,40 @@
                                 <rect key="frame" x="-218" y="53" width="252" height="250"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="WXr-4U-EUr">
+                                <rect key="frame" x="169" y="586" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDU-Kd-r0u">
+                                <rect key="frame" x="280" y="584" width="40" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="replay"/>
+                                <connections>
+                                    <action selector="loopPress:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="wIe-BS-gGK"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6tl-ur-jA3">
+                                <rect key="frame" x="56" y="589" width="42" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="random"/>
+                                <connections>
+                                    <action selector="randomPress:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="Ete-m4-YwU"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w74-JR-aZf">
+                                <rect key="frame" x="293" y="581" width="12" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="44"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OhP-Ce-10B">
+                                <rect key="frame" x="71" y="582" width="12" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="44"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.62419344700000001" blue="0.61124485429999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -171,7 +181,8 @@
                         <outlet property="background_image" destination="fky-xZ-lvP" id="oKh-Vg-8FL"/>
                         <outlet property="currentTimeLabel" destination="Ez3-I9-vZh" id="Ji1-Sp-TmZ"/>
                         <outlet property="image_cover" destination="aaG-nR-J1z" id="4uF-N2-1GL"/>
-                        <outlet property="loadingLabel" destination="0mV-21-KZH" id="wEZ-JQ-BfV"/>
+                        <outlet property="loopButton" destination="cDU-Kd-r0u" id="FTK-ZT-GQt"/>
+                        <outlet property="loopLED" destination="w74-JR-aZf" id="3RT-oo-53T"/>
                         <outlet property="music_list" destination="LUY-Dk-pXN" id="4dL-JJ-Jhd"/>
                         <outlet property="nextButton" destination="3Ue-tF-9hJ" id="QGV-6c-QpJ"/>
                         <outlet property="next_artwork" destination="Qae-24-CtD" id="b8g-Ku-0rz"/>
@@ -179,8 +190,10 @@
                         <outlet property="playerSlider" destination="62P-ax-lpR" id="gbK-zK-qmd"/>
                         <outlet property="prevButton" destination="wyA-r8-JnZ" id="hb9-qv-8yp"/>
                         <outlet property="prev_image" destination="sxb-wG-L55" id="bnv-Db-Uol"/>
+                        <outlet property="randomButton" destination="6tl-ur-jA3" id="Vyf-5X-byM"/>
+                        <outlet property="randomLED" destination="OhP-Ce-10B" id="uTP-8J-6Kd"/>
                         <outlet property="scrolling_image" destination="QP8-mU-IzF" id="8oF-Jj-IWv"/>
-                        <outlet property="seekLoadingLabel" destination="9JD-W4-09x" id="HKC-V6-i5S"/>
+                        <outlet property="songLoading" destination="WXr-4U-EUr" id="EGp-ZS-Dum"/>
                         <outlet property="song_author" destination="hHf-Nd-fQb" id="2mC-WI-Ce3"/>
                         <outlet property="song_title_label" destination="UYZ-Je-hiD" id="FJ7-ma-QgB"/>
                         <outlet property="timeLabel" destination="ivh-Yg-N7g" id="4eg-m7-Ujj"/>
@@ -202,5 +215,7 @@
         <image name="no_cover" width="500" height="500"/>
         <image name="pause_grey" width="60" height="60"/>
         <image name="prev_grey" width="60" height="60"/>
+        <image name="random" width="50" height="50"/>
+        <image name="replay" width="50" height="50"/>
     </resources>
 </document>

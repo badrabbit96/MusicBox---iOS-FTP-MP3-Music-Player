@@ -51,6 +51,10 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if randomStatus == false{
             randomLED.textColor = UIColor.green
             randomStatus = true
+            
+            //turn off loop
+            loopLED.textColor = UIColor.lightGray
+            loopStatus = false
         }
         
         else if randomStatus == true{
@@ -64,6 +68,10 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if loopStatus ==  false{
             loopLED.textColor = UIColor.green
             loopStatus = true
+            
+            //turn off random
+            randomLED.textColor = UIColor.lightGray
+            randomStatus = false
         }
         
         else if loopStatus ==  true{
@@ -553,16 +561,32 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
 
     func nextTrack(){
-        if(index < playList.count-1){
+        
+        if loopStatus == true{
+            isPaused = false
+            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextArtwork()
+            initPrevArtwork()
+        }
+            
+        else if randomStatus == true{
+            let elements = playList.count
+            index = Int.random(in: 0..<elements)
+            isPaused = false
+            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextArtwork()
+            initPrevArtwork()
+        }
+        
+        else if(index < playList.count-1){
             index = index + 1
             isPaused = false
             playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
-            
-            //initNextArtworkSlider()
-          
             
         }else{
             index = 0

@@ -6,6 +6,7 @@ MusicBox is an audio player written in Swift, making it simpler to work with aud
 - FTP Music Streaming
 - Read Artwork, Author and Title from MP3
 - Artwork slider
+- Background blur (artwork) effect
 - Loop and random music play
 - Duration bar
 - Duration time, left time

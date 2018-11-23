@@ -117,12 +117,19 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionDown(swipe:)))
         downSwipe.direction = UISwipeGestureRecognizer.Direction.down
         self.view.addGestureRecognizer(downSwipe)
-       
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longPress))
+        self.view.addGestureRecognizer(longPress)
+        
         scrolling_image.isUserInteractionEnabled = true
         
         let RotationScrolling = UIRotationGestureRecognizer(target: self, action: #selector(self.Rotation))
         scrolling_image.addGestureRecognizer(RotationScrolling)
         
+    }
+    
+    @objc func longPress() {
+       print("aaa")
     }
     
     @objc func Rotation(sender: UIRotationGestureRecognizer){

@@ -1,11 +1,8 @@
-
 import UIKit
 import AVFoundation
 import AVKit
 
 class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
-    
-    
     
     @IBOutlet weak var thumbNailImageView: UIImageView!
     @IBOutlet weak var playButton: UIButton!
@@ -15,7 +12,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var playerSlider: UISlider!
     @IBOutlet weak var currentTimeLabel: UILabel!
     @IBOutlet weak var songLoading: UIActivityIndicatorView!
-    
     @IBOutlet weak var randomButton: UIButton!
     @IBOutlet weak var loopButton: UIButton!
     @IBOutlet weak var randomLED: UILabel!
@@ -81,7 +77,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         isPaused = false
@@ -130,8 +125,14 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    @objc func longPress() {
-       print("aaa")
+    @objc func longPress(sender: UILongPressGestureRecognizer) {
+        
+        if sender.state == .began {
+            print("start")
+        }
+        if sender.state == .ended {
+            print("stop")
+        }
     }
     
     @objc func Rotation(sender: UIRotationGestureRecognizer){
@@ -174,7 +175,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             else{
             self.next_artwork.isHidden = false
             }
-            
             self.bottomTable = false
             
         }
@@ -231,12 +231,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //cell.contentView.backgroundColor = .clear
         //cell.selectedBackgroundView?.backgroundColor = .clear
         
-        
         tableView.backgroundColor = .clear
         cell.backgroundColor = .clear
-        
         tableView.backgroundColor = UIColor.darkGray
-
         cell.textLabel?.textColor = UIColor.white
         
        // tableView.layer.opacity = 0.1;
@@ -245,7 +242,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.layer.cornerRadius = 5.0;
         tableView.layer.borderColor = UIColor.lightGray.cgColor;
 
-        
         return cell
     }
     
@@ -289,7 +285,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         blurEffectView.frame = view.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     
-        
         for item in metadataList {
             
             guard let key = item.commonKey?.rawValue, let value = item.value else{
@@ -313,18 +308,17 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         
                     }
                     else{
-                        //print("brak")
+                        //print("no artwork")
+                        }
                     }
-                }
                 }
             
             default:
                 continue
             }
         }
-        
     }
-    //aaa
+    
     func initNextSlider(){
         //create slider animation
         UIView.animate(withDuration: 1, animations: {
@@ -383,8 +377,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     }
                     else{
                         
+                        }
                     }
-                }
                 }
             default:
                 continue
@@ -412,8 +406,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         else{
                             
+                            }
                         }
-                    }
                     }
                 default:
                     continue
@@ -430,9 +424,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if bottomTable == false{
             prev_image.isHidden = false
             }
-            
-            
-            //index = index - 1
             countIndex = index - 1
             let playerItem = AVPlayerItem(url: URL(string:(playList[self.countIndex] as! String))!)
             let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
@@ -451,8 +442,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         else{
                             
+                            }
                         }
-                    }
                     }
                 default:
                     continue
@@ -464,7 +455,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-
     override func viewWillDisappear( _ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)

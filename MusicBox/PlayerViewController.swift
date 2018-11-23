@@ -31,6 +31,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var blur_counter : Int = 0
     var randomStatus: Bool! = false
     var loopStatus: Bool! = false
+    var bottomTable: Bool! = false
    
     
     @IBOutlet weak var song_author: UILabel!
@@ -174,6 +175,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.next_artwork.isHidden = false
             }
             
+            self.bottomTable = false
             
         }
     }
@@ -185,6 +187,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.music_list.frame = self.CGRectMake(15, 25, self.music_list.frame.width
                 , self.music_list.frame.height)
         })
+        bottomTable = true
     }
     
     func CGRectMake(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat) -> CGRect {
@@ -418,13 +421,17 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             
         }else{
-            next_artwork.isHidden = true
+             //next_artwork.isHidden = true
         }
     }
     
     func initPrevArtwork(){
         if(index > 0){
+            if bottomTable == false{
             prev_image.isHidden = false
+            }
+            
+            
             //index = index - 1
             countIndex = index - 1
             let playerItem = AVPlayerItem(url: URL(string:(playList[self.countIndex] as! String))!)

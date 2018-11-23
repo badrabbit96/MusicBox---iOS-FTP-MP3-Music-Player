@@ -84,7 +84,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         isPaused = false
-        playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+        playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
         self.playList.add("http://stacja-meteo.pl/mp3/Post%20Malone%20-%20Congratulations.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/The%20Chainsmokers%20&%20Aazar%20%E2%80%93%20Siren.mp3")
@@ -455,11 +455,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @available(iOS 10.0, *)
     func togglePlayPause() {
         if avPlayer.timeControlStatus == .playing  {
-            playButton.setImage(UIImage(named:"play_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"play_circle"), for: .normal)
             avPlayer.pause()
             isPaused = true
         } else {
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             avPlayer.play()
             isPaused = false
         }
@@ -564,7 +564,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         if loopStatus == true{
             isPaused = false
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
@@ -574,7 +574,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let elements = playList.count
             index = Int.random(in: 0..<elements)
             isPaused = false
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
@@ -583,7 +583,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         else if(index < playList.count-1){
             index = index + 1
             isPaused = false
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
@@ -591,7 +591,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }else{
             index = 0
             isPaused = false
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
@@ -602,7 +602,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if(index > 0){
             index = index - 1
             isPaused = false
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
             initNextArtwork()
             initPrevArtwork()
@@ -614,7 +614,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let seconds: Int32 = totalSeconds%60
         let minutes: Int32 = (totalSeconds/60)%60
         let hours: Int32 = totalSeconds/3600
-        return String(format: "%02d:%02d:%02d", hours,minutes,seconds)
+        return String(format: "%02d:%02d", minutes,seconds)
     }
     
     @IBAction func backButtonClicked(_ sender: Any) {

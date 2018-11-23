@@ -22,8 +22,7 @@ MusicBox is an audio player written in Swift, making it simpler to work with aud
 iOS 10.0+
 
 ## Language
-Code: English <br>
-Interface: Polish
+English
 
 ## AudioPlayer
 ```swift
@@ -37,8 +36,7 @@ The player will load the track and start playing when ready.
 
 <p align="center">
   <img src="http://stacja-meteo.pl/mp3/images/1.png" width="350">
-  
-  <img src="http://stacja-meteo.pl/mp3/images/2.png" width="350">
+ 
   
   <img src="http://stacja-meteo.pl/mp3/images/3.png" width="350">
 </p>

@@ -36,9 +36,11 @@ The player will load the track and start playing when ready.
 ## Example
 
 <p align="center">
-  <img src="http://stacja-meteo.pl/mp3/images/IMG_0172.PNG" width="350">
+  <img src="http://stacja-meteo.pl/mp3/images/1.png" width="350">
   
-  <img src="http://stacja-meteo.pl/mp3/images/IMG_0173.PNG" width="350">
+  <img src="http://stacja-meteo.pl/mp3/images/2.png" width="350">
+  
+  <img src="http://stacja-meteo.pl/mp3/images/3.png" width="350">
 </p>
 
 

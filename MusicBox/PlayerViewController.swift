@@ -21,7 +21,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var randomLED: UILabel!
     @IBOutlet weak var loopLED: UILabel!
     
-    
     var playList: NSMutableArray = NSMutableArray()
     var timer: Timer?
     var index: Int = Int()
@@ -32,6 +31,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var blur_counter : Int = 0
     var randomStatus: Bool! = false
     var loopStatus: Bool! = false
+   
     
     @IBOutlet weak var song_author: UILabel!
     @IBOutlet weak var image_cover: UIImageView!
@@ -103,6 +103,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         image_cover.layer.shadowOffset = CGSize.zero
         image_cover.layer.shadowRadius = 30
         
+        initArtwork()
         initNextArtwork()
         initPrevArtwork()
         
@@ -135,14 +136,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @objc func Rotation(sender: UIRotationGestureRecognizer){
         
         let sliderNow = playerSlider.value
-        
-        //var sliderNewTime = 0
-        //if (sender.rotation > 0){
-        //    sliderNewTime = Int(sliderNow + 1)
-        //}
-        //else {
-        //    sliderNewTime = Int(sliderNow - 1)
-        //}
        
         let sliderRotation = sender.velocity
         let sliderNewTime = sliderNow + Float(sliderRotation)
@@ -165,8 +158,23 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.music_list.isHidden = true
             self.image_cover.isHidden = false
-            self.next_artwork.isHidden = false
+            
+            if (self.index == 0){
+            // prev artwork is hidden
+            }
+            else{
             self.prev_image.isHidden = false
+            }
+            let items = self.playList.count
+            if ( self.index == items){
+            // next artwork is hidden
+                print("test")
+            }
+            else{
+            self.next_artwork.isHidden = false
+            }
+            
+            
         }
     }
     
@@ -244,15 +252,16 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
             selectedCell.contentView.backgroundColor = UIColor.gray
             
-           
-            
             let audioPath = "http://stacja-meteo.pl/mp3/" + songs[indexPath.row] + ".mp3"
             let audioPathFinal = audioPath.replacingOccurrences(of: " ", with: "%20")
             
             self.play(url: URL(string:(audioPathFinal))!)
             self.setupTimer()
-            playButton.setImage(UIImage(named:"pause_grey"), for: .normal)
-            
+            index = indexPath.row
+            initArtwork()
+            initNextArtwork()
+            initPrevArtwork()
+            playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             
         }
         catch
@@ -260,8 +269,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             print("ERROR")
         }
     }
-    
-  
     
     func play(url:URL) {
         self.avPlayer = AVPlayer(playerItem: AVPlayerItem(url: url))
@@ -289,19 +296,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             switch key {
             case "title" : song_title_label.text = value as? String
             case "artist": song_author.text = value as? String
-            //case "artwork" where value is Data : image_cover.image = UIImage(data: value as! Data)
-            
             case "artwork": do {
                 if let audioImage = UIImage(data: value as! Data) {
                     
-                //    let size = CGSize(width: 0, height: 0)
-
                     if (audioImage != nil){
-                        
-                        //image_cover.imageWithFade = audioImage
 
-                        image_cover.image = audioImage
-                        
                         background_image.image = audioImage
                         
                         if(blur_counter == 0){
@@ -309,15 +308,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         blur_counter = blur_counter + 1
                         
-                        //print("jest obrazek")
                     }
                     else{
                         //print("brak")
                     }
-                    
-                    
                 }
-              
                 }
             
             default:
@@ -326,7 +321,74 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
     }
+    //aaa
+    func initNextSlider(){
+        //create slider animation
+        UIView.animate(withDuration: 1, animations: {
+            self.prev_image.frame.origin.x -= 278
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 1, animations: {
+            self.image_cover.frame.origin.x -= 278
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 1, animations: {
+            self.next_artwork.frame.origin.x -= 278
+        }, completion: nil)
+        // back to old possition
+        self.prev_image.frame.origin.x += 278
+        self.image_cover.frame.origin.x += 278
+        self.next_artwork.frame.origin.x += 278
+    }
+    
+    func initPrevSlider(){
+        //create slider animation
+        UIView.animate(withDuration: 1, animations: {
+            self.prev_image.frame.origin.x += 278
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 1, animations: {
+            self.image_cover.frame.origin.x += 278
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 1, animations: {
+            self.next_artwork.frame.origin.x += 278
+        }, completion: nil)
+        
+        // back to old possition
+        self.prev_image.frame.origin.x -= 278
+        self.image_cover.frame.origin.x -= 278
+        self.next_artwork.frame.origin.x -= 278
+    }
   
+    func initArtwork(){
+        countIndex = index
+        let playerItem = AVPlayerItem(url: URL(string:(playList[self.countIndex] as! String))!)
+        let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
+        
+        for item in metadataList {
+            
+            guard let key = item.commonKey?.rawValue, let value = item.value else{
+                continue
+            }
+            
+            switch key {
+            case "artwork": do {
+                if let audioImage = UIImage(data: value as! Data) {
+                    if (audioImage != nil){
+                        image_cover.image = audioImage
+                    }
+                    else{
+                        
+                    }
+                }
+                }
+            default:
+                continue
+            }
+        }
+    }
+    
     func initNextArtwork(){
         if(index < playList.count-1){
             countIndex = index + 1
@@ -394,12 +456,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
          prev_image.isHidden = true
         }
     }
-    // aaa
     
-    func initNextArtworkSlider(){
-        
-        
-    }
 
     override func viewWillDisappear( _ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -410,10 +467,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
-        
     }
     
     func gettingSongName()
@@ -423,21 +477,16 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             for song in playList
             {
                 var mySong = song
-                //  print (mySong)
                 if (mySong as AnyObject).contains(".mp3")
                 {
-                    //print (mySong)
                     let findString = (mySong as AnyObject).components(separatedBy: "/")
-                    //print (mySong)
                     mySong = (findString[findString.count-1])
-                    // print (mySong)
                     mySong = (mySong as AnyObject).replacingOccurrences(of: "%20", with: " ")
                     mySong = (mySong as AnyObject).replacingOccurrences(of: "%5B", with: "")
                     mySong = (mySong as AnyObject).replacingOccurrences(of: "%5D", with: "")
                     mySong = (mySong as AnyObject).replacingOccurrences(of: "%C5%82", with: "ł")
                     mySong = (mySong as AnyObject).replacingOccurrences(of: ".mp3", with: "")
                     songs.append(mySong as! String)
-                    //print(songs)
                 }
             }
             
@@ -454,8 +503,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if #available(iOS 10.0, *) {
             self.togglePlayPause()
         } else {
-            // showAlert "upgrade ios version to use this feature"
-           
         }
     }
     
@@ -573,6 +620,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextSlider()
+            initArtwork()
             initNextArtwork()
             initPrevArtwork()
         }
@@ -583,6 +632,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextSlider()
+            initArtwork()
             initNextArtwork()
             initPrevArtwork()
         }
@@ -592,6 +643,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextSlider()
+            initArtwork()
             initNextArtwork()
             initPrevArtwork()
             
@@ -600,6 +653,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
+            initNextSlider()
+            initArtwork()
             initNextArtwork()
             initPrevArtwork()
         }
@@ -611,6 +666,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
+            initPrevSlider()
+            initArtwork()
             initNextArtwork()
             initPrevArtwork()
             
@@ -638,17 +695,4 @@ extension AVPlayer {
     }
 }
 
-extension UIImageView{
-    var imageWithFade:UIImage?{
-        get{
-            return self.image
-        }
-        set{
-            UIView.transition(with: self,
-                              duration: 0.5, options: .transitionFlipFromBottom, animations: {
-                                self.image = newValue
-            }, completion: nil)
-        }
-    }
-}
 

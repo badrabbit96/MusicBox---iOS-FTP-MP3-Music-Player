@@ -85,10 +85,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         isPaused = false
         playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
         self.playList.add("http://stacja-meteo.pl/mp3/Post%20Malone%20-%20Congratulations.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/White%202115%20-%20California.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/The%20Chainsmokers%20&%20Aazar%20%E2%80%93%20Siren.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/Khalid%20-%20Better.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/Pawel%20Kukiz%20-%20Na%20falochronie.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/I'll%20never%20be%20the%20same%20-%20Camila%20Cabello%20.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Kortez%20-%20Pierwsza.mp3")
+        self.playList.add("http://stacja-meteo.pl/mp3/Meghan%20Trainor%20-%20Ill%20Be%20Home.mp3")
         self.playList.add("http://stacja-meteo.pl/mp3/Dzem-%20Wehikul%20czasu.mp3")
         self.play(url: URL(string:(playList[self.index] as! String))!)
         

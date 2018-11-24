@@ -18,6 +18,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var loopLED: UILabel!
     
     var playList: NSMutableArray = NSMutableArray()
+    var infoSongList: Array<String> = Array()
     var timer: Timer?
     var index: Int = Int()
     var avPlayer: AVPlayer!
@@ -28,7 +29,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var randomStatus: Bool! = false
     var loopStatus: Bool! = false
     var bottomTable: Bool! = false
-   
     
     @IBOutlet weak var song_author: UILabel!
     @IBOutlet weak var image_cover: UIImageView!
@@ -38,6 +38,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var scrolling_image: UIImageView!
     @IBOutlet weak var next_artwork: UIImageView!
     @IBOutlet weak var prev_image: UIImageView!
+   
+    @IBOutlet weak var infoSongTable: UITableView!
+    
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -90,6 +93,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.play(url: URL(string:(playList[self.index] as! String))!)
         
         music_list.isHidden = true
+        infoSongTable.isHidden = true
         gettingSongName()
         
         self.setupTimer()
@@ -123,15 +127,16 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let RotationScrolling = UIRotationGestureRecognizer(target: self, action: #selector(self.Rotation))
         scrolling_image.addGestureRecognizer(RotationScrolling)
         
+        readSongInfo()
     }
     
     @objc func longPress(sender: UILongPressGestureRecognizer) {
         
         if sender.state == .began {
-            print("start")
+            infoSongTable.isHidden = false
         }
         if sender.state == .ended {
-            print("stop")
+            infoSongTable.isHidden = true
         }
     }
     
@@ -221,10 +226,20 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
+        
+        if (tableView == music_list){
+            return songs.count
+        }
+        
+        else if (tableView == infoSongTable){
+            return infoSongList.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if tableView == music_list {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = songs[indexPath.row]
         
@@ -243,11 +258,31 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.layer.borderColor = UIColor.lightGray.cgColor;
 
         return cell
+        }
+        
+        else if tableView == infoSongTable{
+            
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel?.text = infoSongList[indexPath.row]
+   
+            tableView.backgroundColor = .clear
+            cell.backgroundColor = .clear
+            tableView.backgroundColor = UIColor.darkGray
+            cell.textLabel?.textColor = UIColor.white
+ 
+            tableView.layer.borderWidth = 2.0;
+            tableView.layer.cornerRadius = 5.0;
+            tableView.layer.borderColor = UIColor.lightGray.cgColor;
+            
+            return cell
+        }
+        
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        do
-        {
+        
+        if tableView == music_list{
             let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
             selectedCell.contentView.backgroundColor = UIColor.gray
             
@@ -260,12 +295,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             initArtwork()
             initNextArtwork()
             initPrevArtwork()
+            readSongInfo()
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             
-        }
-        catch
-        {
-            print("ERROR")
         }
     }
     
@@ -317,6 +349,35 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 continue
             }
         }
+    }
+    
+    func readSongInfo(){
+        infoSongList.removeAll()
+        countIndex = index
+        let playerItem = AVPlayerItem(url: URL(string:(playList[self.countIndex] as! String))!)
+        let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
+        
+        var album = ""
+        var type = ""
+        
+        for item in metadataList {
+            
+            guard let key = item.commonKey?.rawValue, let value = item.value else{
+                continue
+            }
+            
+            switch key {
+            case "albumName" : album = (value as? String)!
+            infoSongList.append("Album: " + album)
+            case "type" : type = (value as? String)!
+            infoSongList.append("Typ: " + type)
+           
+            default:
+                continue
+            }
+        }
+        infoSongTable.reloadData()
+      
     }
     
     func initNextSlider(){
@@ -613,10 +674,12 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     func nextTrack(){
         
+        
         if loopStatus == true{
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            readSongInfo()
             initNextSlider()
             initArtwork()
             initNextArtwork()
@@ -629,6 +692,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            readSongInfo()
             initNextSlider()
             initArtwork()
             initNextArtwork()
@@ -640,6 +704,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
             self.play(url: URL(string:(playList[self.index] as! String))!)
+            readSongInfo()
             initNextSlider()
             initArtwork()
             initNextArtwork()
@@ -650,6 +715,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
+            readSongInfo()
             initNextSlider()
             initArtwork()
             initNextArtwork()
@@ -658,11 +724,13 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func prevTrack(){
+        
         if(index > 0){
             index = index - 1
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
              self.play(url: URL(string:(playList[self.index] as! String))!)
+            readSongInfo()
             initPrevSlider()
             initArtwork()
             initNextArtwork()

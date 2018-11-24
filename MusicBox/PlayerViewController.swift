@@ -359,7 +359,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         var album = ""
         var type = ""
-        
+        //
         for item in metadataList {
             
             guard let key = item.commonKey?.rawValue, let value = item.value else{

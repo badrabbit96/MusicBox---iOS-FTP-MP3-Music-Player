@@ -29,6 +29,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var randomStatus: Bool! = false
     var loopStatus: Bool! = false
     var bottomTable: Bool! = false
+    var urlAdress = "http://stacja-meteo.pl/mp3"
     
     @IBOutlet weak var song_author: UILabel!
     @IBOutlet weak var image_cover: UIImageView!
@@ -80,17 +81,68 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    func getMp3() {
+        
+        let url = URL(string: self.urlAdress)!
+        let task = URLSession.shared.downloadTask(with: url) { localURL, urlResponse, error in
+            if let localURL = localURL {
+                if let string = try? String(contentsOf: localURL) {
+
+                    let regex = try! NSRegularExpression(pattern:"href=(.*?)>", options: [])
+                    var results = [String]()
+
+                    regex.enumerateMatches(in: string, options: [], range: NSMakeRange(0, string.utf16.count)) { result, flags, stop in
+                        if let r = result?.range(at: 1), let range = Range(r, in: string) {
+                           
+                            if (String(String(string[range]).toLengthOf(length: 1).dropLast())).contains(".mp3"){
+                            self.playList.add(self.urlAdress + "/" + String(String(string[range]).toLengthOf(length: 1).dropLast()))
+                            }
+                        }
+                    }
+                    print(results)
+                }
+            }
+        }
+        task.resume()
+    }
+    
+        
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         isPaused = false
+        
+        let url = URL(string: self.urlAdress)!
+        let task = URLSession.shared.downloadTask(with: url) { localURL, urlResponse, error in
+            if let localURL = localURL {
+                if let string = try? String(contentsOf: localURL) {
+                    
+                    let regex = try! NSRegularExpression(pattern:"href=(.*?)>", options: [])
+                    
+                    regex.enumerateMatches(in: string, options: [], range: NSMakeRange(0, string.utf16.count)) { result, flags, stop in
+                        if let r = result?.range(at: 1), let range = Range(r, in: string) {
+                            
+                            if (String(String(string[range]).toLengthOf(length: 1).dropLast())).contains(".mp3"){
+                                self.playList.add(self.urlAdress + "/" + String(String(string[range]).toLengthOf(length: 1).dropLast()))
+                            }
+                        }
+                    }
+                    
+                   print(self.playList)
+                }
+            }
+        }
+        task.resume()
+        
         playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
         self.playList.add("http://stacja-meteo.pl/mp3/Post%20Malone%20-%20Congratulations.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/White%202115%20-%20California.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/I'll%20never%20be%20the%20same%20-%20Camila%20Cabello%20.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/Kortez%20-%20Pierwsza.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/Meghan%20Trainor%20-%20Ill%20Be%20Home.mp3")
-        self.playList.add("http://stacja-meteo.pl/mp3/Dzem-%20Wehikul%20czasu.mp3")
+        //self.playList.add("http://stacja-meteo.pl/mp3/White%202115%20-%20California.mp3")
+        //self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
+        //self.playList.add("http://stacja-meteo.pl/mp3/I'll%20never%20be%20the%20same%20-%20Camila%20Cabello%20.mp3")
+        //self.playList.add("http://stacja-meteo.pl/mp3/Kortez%20-%20Pierwsza.mp3")
+        //self.playList.add("http://stacja-meteo.pl/mp3/Meghan%20Trainor%20-%20Ill%20Be%20Home.mp3")
+        //self.playList.add("http://stacja-meteo.pl/mp3/Dzem-%20Wehikul%20czasu.mp3")
+        print(self.playList)
+        
         self.play(url: URL(string:(playList[self.index] as! String))!)
         
         music_list.isHidden = true
@@ -129,6 +181,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         scrolling_image.addGestureRecognizer(RotationScrolling)
         
         readSongInfo()
+        
     }
     
     @objc func longPress(sender: UILongPressGestureRecognizer) {
@@ -286,11 +339,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if tableView == music_list{
             let selectedCell:UITableViewCell = tableView.cellForRow(at: indexPath)!
             selectedCell.contentView.backgroundColor = UIColor.gray
-            
-            let audioPath = "http://stacja-meteo.pl/mp3/" + songs[indexPath.row] + ".mp3"
-            let audioPathFinal = audioPath.replacingOccurrences(of: " ", with: "%20")
-            
-            self.play(url: URL(string:(audioPathFinal))!)
+    
+            self.play(url: URL(string:(playList[indexPath.row] as! String))!)
             self.setupTimer()
             index = indexPath.row
             initArtwork()
@@ -531,22 +581,36 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func gettingSongName()
     {
+        let elements = playList.count
+        var artist = ""
+        var title = ""
+        var listLabel = ""
         do
         {
-            for song in playList
+            for i in 0...elements-1
             {
-                var mySong = song
-                if (mySong as AnyObject).contains(".mp3")
-                {
-                    let findString = (mySong as AnyObject).components(separatedBy: "/")
-                    mySong = (findString[findString.count-1])
-                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%20", with: " ")
-                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%5B", with: "")
-                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%5D", with: "")
-                    mySong = (mySong as AnyObject).replacingOccurrences(of: "%C5%82", with: "ł")
-                    mySong = (mySong as AnyObject).replacingOccurrences(of: ".mp3", with: "")
-                    songs.append(mySong as! String)
+                let playerItem = AVPlayerItem(url: URL(string:(playList[i] as! String))!)
+                let metadataList = playerItem.asset.metadata as! [AVMetadataItem]
+                
+                for item in metadataList {
+                    
+                    guard let key = item.commonKey?.rawValue, let value = item.value else{
+                        continue
+                    }
+                    
+                    switch key {
+                    case "title" : title = (value as? String)!
+                    case "artist" : artist = (value as? String)!
+                    
+                    listLabel = artist + " - " + title
+                    songs.append(listLabel)
+                        
+                    default:
+                        continue
+                    }
                 }
+                //var mySong = song
+                //if (mySong as AnyObject).contains(".mp3")
             }
             
             music_list.reloadData()
@@ -761,4 +825,27 @@ extension AVPlayer {
     }
 }
 
+extension StringProtocol where Index == String.Index {
+    func subString(after: String, before: String? = nil, options: String.CompareOptions = []) -> SubSequence? {
+        guard let lowerBound = range(of: after, options: options)?.upperBound else { return nil }
+        guard let before = before,
+            let upperbound = self[lowerBound..<endIndex].range(of: before, options: options)?.lowerBound else {
+                return self[lowerBound...]
+        }
+        return self[lowerBound..<upperbound]
+    }
+}
 
+extension String {
+    
+    func toLengthOf(length:Int) -> String {
+        if length <= 0 {
+            return self
+        } else if let to = self.index(self.startIndex, offsetBy: length, limitedBy: self.endIndex) {
+            return self.substring(from: to)
+            
+        } else {
+            return ""
+        }
+    }
+}

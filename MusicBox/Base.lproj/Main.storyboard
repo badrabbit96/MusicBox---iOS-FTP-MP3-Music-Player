@@ -197,6 +197,11 @@
                                     <outlet property="delegate" destination="ZeG-Ht-gUa" id="jkB-TK-pjZ"/>
                                 </connections>
                             </tableView>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="small_pear" translatesAutoresizingMaskIntoConstraints="NO" id="4qM-HX-oNG">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.62419344700000001" blue="0.61124485429999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -213,6 +218,7 @@
                         <outlet property="music_list" destination="LUY-Dk-pXN" id="4dL-JJ-Jhd"/>
                         <outlet property="nextButton" destination="3Ue-tF-9hJ" id="QGV-6c-QpJ"/>
                         <outlet property="next_artwork" destination="Qae-24-CtD" id="b8g-Ku-0rz"/>
+                        <outlet property="pear_yolo" destination="4qM-HX-oNG" id="lex-9x-7XJ"/>
                         <outlet property="playButton" destination="8YM-dp-P0s" id="NC0-rx-utA"/>
                         <outlet property="playerSlider" destination="62P-ax-lpR" id="gbK-zK-qmd"/>
                         <outlet property="prevButton" destination="wyA-r8-JnZ" id="hb9-qv-8yp"/>
@@ -244,5 +250,6 @@
         <image name="prev_outlines" width="100" height="100"/>
         <image name="random" width="50" height="50"/>
         <image name="replay" width="50" height="50"/>
+        <image name="small_pear" width="135" height="138"/>
     </resources>
 </document>

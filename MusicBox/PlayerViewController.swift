@@ -40,6 +40,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var next_artwork: UIImageView!
     @IBOutlet weak var prev_image: UIImageView!
    
+    @IBOutlet weak var pear_yolo: UIImageView!
     @IBOutlet weak var infoSongTable: UITableView!
     
     
@@ -89,7 +90,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 if let string = try? String(contentsOf: localURL) {
 
                     let regex = try! NSRegularExpression(pattern:"href=(.*?)>", options: [])
-                    var results = [String]()
+                   
 
                     regex.enumerateMatches(in: string, options: [], range: NSMakeRange(0, string.utf16.count)) { result, flags, stop in
                         if let r = result?.range(at: 1), let range = Range(r, in: string) {
@@ -99,89 +100,61 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             }
                         }
                     }
-                    print(results)
                 }
             }
         }
         task.resume()
     }
     
-        
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        isPaused = false
-        
-        let url = URL(string: self.urlAdress)!
-        let task = URLSession.shared.downloadTask(with: url) { localURL, urlResponse, error in
-            if let localURL = localURL {
-                if let string = try? String(contentsOf: localURL) {
-                    
-                    let regex = try! NSRegularExpression(pattern:"href=(.*?)>", options: [])
-                    
-                    regex.enumerateMatches(in: string, options: [], range: NSMakeRange(0, string.utf16.count)) { result, flags, stop in
-                        if let r = result?.range(at: 1), let range = Range(r, in: string) {
-                            
-                            if (String(String(string[range]).toLengthOf(length: 1).dropLast())).contains(".mp3"){
-                                self.playList.add(self.urlAdress + "/" + String(String(string[range]).toLengthOf(length: 1).dropLast()))
-                            }
-                        }
-                    }
-                    
-                   print(self.playList)
-                }
-            }
+        getMp3()
+    
+        delayWithSeconds(1.5) {
+            self.pear_yolo.isHidden = true
+            super.viewWillAppear(animated)
+            self.isPaused = false
+            
+            self.playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
+            self.play(url: URL(string:(self.playList[self.index] as! String))!)
+            
+            self.music_list.isHidden = true
+            self.infoSongTable.isHidden = true
+            self.gettingSongName()
+            
+            self.setupTimer()
+            
+            self.image_cover.layer.shadowColor = UIColor.black.cgColor
+            self.image_cover.layer.shadowOpacity = 1
+            self.image_cover.layer.shadowOffset = CGSize.zero
+            self.image_cover.layer.shadowRadius = 30
+            
+            self.initArtwork()
+            self.initNextArtwork()
+            self.initPrevArtwork()
+            
+            let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.swipeActionRight(swipe:)))
+            rightSwipe.direction = UISwipeGestureRecognizer.Direction.right
+            self.view.addGestureRecognizer(rightSwipe)
+            
+            let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.swipeActionLeft(swipe:)))
+            leftSwipe.direction = UISwipeGestureRecognizer.Direction.left
+            self.view.addGestureRecognizer(leftSwipe)
+            
+            let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.swipeActionDown(swipe:)))
+            downSwipe.direction = UISwipeGestureRecognizer.Direction.down
+            self.view.addGestureRecognizer(downSwipe)
+            
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longPress))
+            self.view.addGestureRecognizer(longPress)
+            
+            self.scrolling_image.isUserInteractionEnabled = true
+            
+            let RotationScrolling = UIRotationGestureRecognizer(target: self, action: #selector(self.Rotation))
+            self.scrolling_image.addGestureRecognizer(RotationScrolling)
+            
+            self.readSongInfo()
+            
         }
-        task.resume()
-        
-        playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
-        self.playList.add("http://stacja-meteo.pl/mp3/Post%20Malone%20-%20Congratulations.mp3")
-        //self.playList.add("http://stacja-meteo.pl/mp3/White%202115%20-%20California.mp3")
-        //self.playList.add("http://stacja-meteo.pl/mp3/Dawid%20Podsiadlo%20-%20Nie%20Ma%20Fal.mp3")
-        //self.playList.add("http://stacja-meteo.pl/mp3/I'll%20never%20be%20the%20same%20-%20Camila%20Cabello%20.mp3")
-        //self.playList.add("http://stacja-meteo.pl/mp3/Kortez%20-%20Pierwsza.mp3")
-        //self.playList.add("http://stacja-meteo.pl/mp3/Meghan%20Trainor%20-%20Ill%20Be%20Home.mp3")
-        //self.playList.add("http://stacja-meteo.pl/mp3/Dzem-%20Wehikul%20czasu.mp3")
-        print(self.playList)
-        
-        self.play(url: URL(string:(playList[self.index] as! String))!)
-        
-        music_list.isHidden = true
-        infoSongTable.isHidden = true
-        gettingSongName()
-        
-        self.setupTimer()
-        
-        image_cover.layer.shadowColor = UIColor.black.cgColor
-        image_cover.layer.shadowOpacity = 1
-        image_cover.layer.shadowOffset = CGSize.zero
-        image_cover.layer.shadowRadius = 30
-        
-        initArtwork()
-        initNextArtwork()
-        initPrevArtwork()
-        
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionRight(swipe:)))
-        rightSwipe.direction = UISwipeGestureRecognizer.Direction.right
-        self.view.addGestureRecognizer(rightSwipe)
-        
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionLeft(swipe:)))
-        leftSwipe.direction = UISwipeGestureRecognizer.Direction.left
-        self.view.addGestureRecognizer(leftSwipe)
-        
-        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipeActionDown(swipe:)))
-        downSwipe.direction = UISwipeGestureRecognizer.Direction.down
-        self.view.addGestureRecognizer(downSwipe)
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longPress))
-        self.view.addGestureRecognizer(longPress)
-        
-        scrolling_image.isUserInteractionEnabled = true
-        
-        let RotationScrolling = UIRotationGestureRecognizer(target: self, action: #selector(self.Rotation))
-        scrolling_image.addGestureRecognizer(RotationScrolling)
-        
-        readSongInfo()
-        
     }
     
     @objc func longPress(sender: UILongPressGestureRecognizer) {
@@ -229,7 +202,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let items = self.playList.count
             if ( self.index == items){
             // next artwork is hidden
-                print("test")
             }
             else{
             self.next_artwork.isHidden = false
@@ -275,9 +247,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             prev_image.isHidden = true
             showTable()
         }
-        
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -297,16 +267,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = songs[indexPath.row]
         
-        //cell.contentView.backgroundColor = .clear
-        //cell.selectedBackgroundView?.backgroundColor = .clear
-        
         tableView.backgroundColor = .clear
         cell.backgroundColor = .clear
         tableView.backgroundColor = UIColor.darkGray
         cell.textLabel?.textColor = UIColor.white
         
-       // tableView.layer.opacity = 0.1;
-
         tableView.layer.borderWidth = 2.0;
         tableView.layer.cornerRadius = 5.0;
         tableView.layer.borderColor = UIColor.lightGray.cgColor;
@@ -609,8 +574,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         continue
                     }
                 }
-                //var mySong = song
-                //if (mySong as AnyObject).contains(".mp3")
             }
             
             music_list.reloadData()
@@ -619,7 +582,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         {
             
         }
-        
     }
     
     @IBAction func playButtonClicked(_ sender: UIButton) {
@@ -723,9 +685,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let leftTime_2 = Int32(time)
             let leftTimeFinal = "-" + formatTimeFromSeconds(totalSeconds: (leftTime_1 - leftTime_2))
             timeLabel.text = leftTimeFinal
-            
-            //timeLabel.text =  self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((self.avPlayer?.currentItem?.asset.duration)!)))))
-            
             currentTimeLabel.text = self.formatTimeFromSeconds(totalSeconds: Int32(Float(Float64(CMTimeGetSeconds((self.avPlayer?.currentItem?.currentTime())!)))))
             
         }else{
@@ -736,9 +695,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-
     func nextTrack(){
-        
         
         if loopStatus == true{
             isPaused = false
@@ -750,7 +707,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             initNextArtwork()
             initPrevArtwork()
         }
-            
         else if randomStatus == true{
             let elements = playList.count
             index = Int.random(in: 0..<elements)
@@ -763,7 +719,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             initNextArtwork()
             initPrevArtwork()
         }
-        
         else if(index < playList.count-1){
             index = index + 1
             isPaused = false
@@ -774,8 +729,8 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             initArtwork()
             initNextArtwork()
             initPrevArtwork()
-            
-        }else{
+        }
+        else{
             index = 0
             isPaused = false
             playButton.setImage(UIImage(named:"pause_circle"), for: .normal)
@@ -800,7 +755,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             initArtwork()
             initNextArtwork()
             initPrevArtwork()
-            
         }
     }
     
@@ -817,7 +771,6 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.timer?.invalidate()
         }
     }
-    
 }
 extension AVPlayer {
     var isPlaying: Bool {
@@ -847,5 +800,11 @@ extension String {
         } else {
             return ""
         }
+    }
+}
+
+func delayWithSeconds(_ seconds: Double, completion: @escaping () -> ()) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+        completion()
     }
 }

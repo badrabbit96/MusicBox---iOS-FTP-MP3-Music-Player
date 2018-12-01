@@ -16,6 +16,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var loopButton: UIButton!
     @IBOutlet weak var randomLED: UILabel!
     @IBOutlet weak var loopLED: UILabel!
+    @IBOutlet weak var urlField: UITextField!
+    @IBOutlet weak var settignsButton: UIButton!
+    @IBOutlet weak var urlInfoLabel: UILabel!
     
     var playList: NSMutableArray = NSMutableArray()
     var infoSongList: Array<String> = Array()
@@ -29,7 +32,11 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var randomStatus: Bool! = false
     var loopStatus: Bool! = false
     var bottomTable: Bool! = false
-    var urlAdress = "http://stacja-meteo.pl/mp3"
+    var urlFieldStatus: Bool! = false
+    var urlAdress = UserDefaults.standard.object(forKey: "urlAdress") as? String
+    
+    //unwarp "!" (self.urlAdress) from 113 and 125 line before use
+    //var urlAdress = "http://stacja-meteo.pl/mp3"
     
     @IBOutlet weak var song_author: UILabel!
     @IBOutlet weak var image_cover: UIImageView!
@@ -48,6 +55,25 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return .lightContent
     }
     
+    @IBAction func settignsButtonPress(_ sender: Any) {
+        
+        if (urlFieldStatus == true){
+            self.urlField.isHidden = false
+            self.urlInfoLabel.isHidden = false
+            urlFieldStatus = false
+        }
+        
+        else if(urlFieldStatus == false){
+            
+            UserDefaults.standard.set(self.urlField.text, forKey: "urlAdress")
+            
+            self.urlField.isHidden = true
+            self.urlInfoLabel.isHidden = true
+            urlFieldStatus = true
+        }
+        
+        
+    }
     @IBAction func randomPress(_ sender: Any) {
     
         if randomStatus == false{
@@ -84,7 +110,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func getMp3() {
         
-        let url = URL(string: self.urlAdress)!
+        let url = URL(string: self.urlAdress!)!
         let task = URLSession.shared.downloadTask(with: url) { localURL, urlResponse, error in
             if let localURL = localURL {
                 if let string = try? String(contentsOf: localURL) {
@@ -96,7 +122,7 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let r = result?.range(at: 1), let range = Range(r, in: string) {
                            
                             if (String(String(string[range]).toLengthOf(length: 1).dropLast())).contains(".mp3"){
-                            self.playList.add(self.urlAdress + "/" + String(String(string[range]).toLengthOf(length: 1).dropLast()))
+                                self.playList.add(self.urlAdress! + "/" + String(String(string[range]).toLengthOf(length: 1).dropLast()))
                             }
                         }
                     }
@@ -108,6 +134,9 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewWillAppear(_ animated: Bool) {
         getMp3()
+        
+        self.urlField.addTarget(nil, action:Selector("firstResponderAction:"), for:.editingDidEndOnExit)
+
     
         delayWithSeconds(1.5) {
             self.pear_yolo.isHidden = true
@@ -119,6 +148,15 @@ class PlayerViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             self.music_list.isHidden = true
             self.infoSongTable.isHidden = true
+            
+            self.urlField.isHidden = true
+            self.urlInfoLabel.isHidden = true
+            
+            if let x = UserDefaults.standard.object(forKey: "urlAdress") as? String
+            {
+                self.urlField.text = x
+            }
+        
             self.gettingSongName()
             
             self.setupTimer()

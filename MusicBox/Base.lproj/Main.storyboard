@@ -25,6 +25,19 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Js-6s-CvL">
+                                <rect key="frame" x="16" y="625" width="34" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="settigns"/>
+                                <connections>
+                                    <action selector="settignsButtonPress:" destination="ZeG-Ht-gUa" eventType="touchUpInside" id="X6j-fk-rrg"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="small_pear" translatesAutoresizingMaskIntoConstraints="NO" id="4qM-HX-oNG">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MusicBox v. 1.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KN8-la-eB7">
                                 <rect key="frame" x="251" y="643" width="124" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -197,15 +210,30 @@
                                     <outlet property="delegate" destination="ZeG-Ht-gUa" id="jkB-TK-pjZ"/>
                                 </connections>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="small_pear" translatesAutoresizingMaskIntoConstraints="NO" id="4qM-HX-oNG">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ddd-0w-YxP">
+                                <rect key="frame" x="135" y="311" width="205" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </imageView>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Serwer FTP:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OMx-PC-MYU">
+                                <rect key="frame" x="37" y="316" width="93" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.62419344700000001" blue="0.61124485429999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="amQ-AM-WJY"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="4qM-HX-oNG"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="MusicBox" id="EN4-fA-zZ3"/>
                     <connections>
@@ -226,10 +254,13 @@
                         <outlet property="randomButton" destination="6tl-ur-jA3" id="Vyf-5X-byM"/>
                         <outlet property="randomLED" destination="OhP-Ce-10B" id="uTP-8J-6Kd"/>
                         <outlet property="scrolling_image" destination="QP8-mU-IzF" id="8oF-Jj-IWv"/>
+                        <outlet property="settignsButton" destination="9Js-6s-CvL" id="X9x-A0-6t3"/>
                         <outlet property="songLoading" destination="WXr-4U-EUr" id="EGp-ZS-Dum"/>
                         <outlet property="song_author" destination="hHf-Nd-fQb" id="2mC-WI-Ce3"/>
                         <outlet property="song_title_label" destination="UYZ-Je-hiD" id="FJ7-ma-QgB"/>
                         <outlet property="timeLabel" destination="ivh-Yg-N7g" id="4eg-m7-Ujj"/>
+                        <outlet property="urlField" destination="ddd-0w-YxP" id="qNu-Iq-Oxd"/>
+                        <outlet property="urlInfoLabel" destination="OMx-PC-MYU" id="8h4-0B-KcF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nO4-VO-qeE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -250,6 +281,7 @@
         <image name="prev_outlines" width="100" height="100"/>
         <image name="random" width="50" height="50"/>
         <image name="replay" width="50" height="50"/>
+        <image name="settigns" width="50" height="50"/>
         <image name="small_pear" width="135" height="138"/>
     </resources>
 </document>

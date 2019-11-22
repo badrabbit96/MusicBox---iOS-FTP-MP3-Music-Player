@@ -35,7 +35,7 @@ The player will load the track and start playing when ready.
 ## Example
 
 <p align="center">
-  <img src="http://stacja-meteo.pl/mp3/images/1.png" width="350">
+  <img src="https://github.com/badrabbit96/MusicBox---iOS-FTP-MP3-Music-Player/blob/master/Images/1.png" width="350">
  
   
   <img src="http://stacja-meteo.pl/mp3/images/3.png" width="350">
